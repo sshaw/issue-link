@@ -1,6 +1,6 @@
 # issue-link
 
-Get the link to JIRA/Tracker/GitHub etc... issues. Turn bug/feature/issue IDs into buttons.
+Get the link to JIRA/Tracker/GitHub etc... bugs, features & issues. Turn their IDs into buttons.
 
 ## Overview
 
@@ -25,7 +25,7 @@ Buttons will be created from text matching `issue-link-issue-regexp`
 and `issue-link-issue-alist`.
 
 URLs are created by matching text against patterns in `issue-link-issue-alist` or, if none matches,
-by using the current branch's remote (currently only `git` is supported).
+by using the current branch's remote (currently only Git is supported).
 
 ### Getting an Issue's Link
 
@@ -44,7 +44,6 @@ The first element is a regexp to match an issue ID and the second is the URL whe
 can be viewed. `%s` will be replaced with the matched ID:
 
 ```el
-;; KEY is your project's key
 (add-to-list 'issue-link-issue-alist
              '("\\<KEY-[[:word:]]+\\>" "https://your-org.atlassian.net/browse/%s"))
 

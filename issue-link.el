@@ -26,26 +26,25 @@
 
 ;;; Commentary:
 
-;; Get the link to JIRA/Tracker/GitHub etc... issues. Turn bug/feature/issue
-;; IDs into buttons.
+;; Get the link to JIRA/Tracker/GitHub etc... bugs, features & issues.
+;; Turn their IDs into buttons.
 ;;
 ;; `issue-link-mode' will turn matching issue IDs into buttons linking
 ;; to the issue.
 ;;
-;; `issue-link' in an interactive function that will get the link for an issue or the
+;; `issue-link' is an interactive function that will get the link for an issue, or the
 ;; issue associated with the current branch.
 
 (require 'cl-lib)
 (require 'url-parse)
 (require 'button-lock)
 
-;;(declare-function button-lock-find-extent "button-lock.el")
-
 ;; We don't want button-lock showing in the mode line
 (setq button-lock-mode-lighter nil)
 
 (defgroup issue-link nil
-  "Get the link to JIRA/Tracker/GitHub etc... issues. Turn bug/feature/issue IDs into buttons."
+  "Get the link to JIRA/Tracker/GitHub etc... bugs, features & issues.
+Turn their IDs into buttons."
   :prefix "issue-link-"
   :link '(url-link :tag "Report a Bug" "https://github.com/sshaw/issue-link/issues")
   :link '(url-link :tag "Homepage" "https://github.com/sshaw/issue-link")
@@ -58,19 +57,21 @@ In most cases you should set `issue-link-issue-alist'."
   :group 'issue-link)
 
 (defcustom issue-link-issue-alist nil
-  "Alist of issue id regexps and URL templates.
+  "Alist of issue ID regexps and URL templates.
 Each element looks like (REGEXP TEMPLATE) where REGEXP is used to
 match an issue ID and TEMPLATE is a URL containing `%s', which will be
-replaced with the issue matched by REGEXP."
-  :type '(alist :key-type string :value-type string)
+replaced with the issue ID matched by REGEXP."
+  :type '(alist :key-type regexp :value-type string)
   :group 'issue-link)
 
 (defcustom issue-link-mouse-binding 'mouse-1
-  "Mouse binding used to open an issue link in a buffer."
+  "Mouse binding used to open an issue button's link."
+  :type 'key-sequence
   :group 'issue-link)
 
 (defcustom issue-link-keyboard-binding "RET"
-  "Keyboard binding used to open an issue link in a buffer."
+  "Keyboard binding used to open an issue button's link."
+  :type 'key-sequence
   :group 'issue-link)
 
 (defcustom issue-link-kill t
@@ -96,6 +97,7 @@ replaced with the issue matched by REGEXP."
   (let ((branch (issue-link--current-branch)))
     (when branch
       (issue-link--get-config (format "remote.%s.url"
+                                      ;; FIXME: branch.master.pushremote. When/how is this set?
                                       (issue-link--get-config (format "branch.%s.remote" branch)))))))
 
 (defun issue-link--build-link-error (issue-id)
@@ -132,6 +134,7 @@ replaced with the issue matched by REGEXP."
               (throw 'found (match-string 1 branch)))))))))
 
 (defun issue-link--button-click ()
+  ;; button-lock callback requires an interactive function
   (interactive)
   (let* ((points (button-lock-find-extent))
          (issue-id (replace-regexp-in-string "^#" "" (buffer-substring-no-properties (car points) (cdr points))))
