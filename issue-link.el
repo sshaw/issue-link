@@ -189,8 +189,9 @@ replaced with the issue matched by REGEXP."
   "Build a URL for the issue given by ISSUE-ID.
 With a prefix argument prompt for ISSUE-ID.
 
-If called interactively and `issue-link-issue-alist' is `nil'
-it will always prompt for `ISSUE-ID'.
+It will always prompt for `ISSUE-ID' if called interactively
+and `issue-link-issue-alist' is `nil' and no issue is associated
+with the current branch.
 
 An attempt is made to build the link by first trying to match
 `ISSUE-ID' with a pattern in `issue-link-issue-alist'. If no match
@@ -201,10 +202,12 @@ If `issue-link-open-in-browser' is non-`nil' open the link via
 `browse-url'.
 
 If the link cannot be build an error is signaled."
-  (interactive (list (if (or current-prefix-arg
-                             (null issue-link-issue-alist))
-                         (read-from-minibuffer "Issue ID: ")
-                       (issue-link--extract-branch-id))))
+  (interactive (list (let (id)
+                       (if (or current-prefix-arg
+                               (null issue-link-issue-alist)
+                               (null (setq id (issue-link--extract-branch-id))))
+                           (read-from-minibuffer "Issue ID: ")
+                         id))))
 
   (let ((url (issue-link-url issue-id)))
 
