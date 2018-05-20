@@ -205,6 +205,8 @@ This allows one to insert and open issue IDs via `org-insert-link'."
                               :help-echo "View issue"
                               ;; use comment face for prog-mode + underline????
                               ;; :face 'font-lock-comment-face
+                              ;; Set this to workaround https://github.com/rolandwalker/button-lock/issues/9
+			      :rear-sticky t
                               :face 'link
                               :face-policy 'prepend)))
 
