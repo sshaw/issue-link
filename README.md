@@ -2,7 +2,7 @@
 
 Get the link to JIRA/Tracker/GitHub etc... bugs, features & issues. Turn their IDs into buttons.
 
-## Overview
+## Usage
 
 `issue-link` has built in support for:
 
@@ -52,9 +52,27 @@ can be viewed. `%s` will be replaced with the matched ID:
 
 ```
 
+## Org Mode
+
+`issue-link` can add an Org mode link type of `issue:`. This allows you to insert
+issue links using `org-issue-link`. To use this add the following function call to your config:
+
+```el
+(issue-link-add-org-link-type)
+```
+
+This can also be called interactively.
+
 ## See Also
+
+### Emacs
 
 * [git-link](https://github.com/sshaw/git-link) - get the GitHub/Bitbucket/GitLab/... URL for a buffer location
 * [button-lock](https://github.com/rolandwalker/button-lock) - easily create clickable & mouseable text
 * [build-status](https://github.com/sshaw/build-status) - monitors and shows a buffer's build status in the mode line
 * [copy-as-format](https://github.com/sshaw/copy-as-format) - copy buffer locations as GitHub/Slack/JIRA/HipChat/... formatted code
+
+### Google Chrome
+
+* [Jirafy](https://chrome.google.com/webstore/detail/jirafy/npldkpkhkmpnfhpmeoahhakbgcldplbj) - linkifies JIRA ticket numbers on select pages
+* [Quick JIRA](https://chrome.google.com/webstore/detail/quick-jira/acdnmaeifljongleeegkkfnfcopblokj) - quickly open a JIRA issue

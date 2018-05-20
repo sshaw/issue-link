@@ -34,6 +34,9 @@
 ;;
 ;; `issue-link' is an interactive function that will get the link for an issue, or the
 ;; issue associated with the current branch.
+;;
+;; To add an Org mode link type of `issue:' call `issue-link-add-org-link-type'.
+;;
 
 (require 'cl-lib)
 (require 'url-parse)
@@ -159,6 +162,34 @@ replaced with the issue ID matched by REGEXP."
                                           (url-filename urlobj))))
 
     urlobj))
+
+(defun issue-link--org-export (path desc format)
+  (let ((url (issue-link-url path)))
+    (when (null desc)
+      (setq desc path))
+
+    (if url
+        (cond
+         ((eq format 'html)  (format "<a href='%s'>%s</a>" url desc))
+         ((eq format 'latex) (format "\\href{%s}{%s}" url desc))
+         (t desc))
+      (issue-link--build-link-error issue-id))))
+
+(defun issue-link--org-open (issue-id)
+  (let ((url (issue-link-url issue-id)))
+    (if url
+        (browse-url url)
+      (issue-link--build-link-error issue-id))))
+
+;;;###autoload
+(defun issue-link-add-org-link-type ()
+  "Add an Org mode link type of `issue:'.
+This allows one to insert and open issue IDs via `org-insert-link'."
+  (interactive)
+  (require 'org)
+  (org-link-set-parameters "issue"
+                           :follow 'issue-link--org-open
+                           :export 'issue-link--org-export))
 
 ;;;###autoload
 (define-minor-mode issue-link-mode
