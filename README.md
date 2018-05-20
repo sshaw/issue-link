@@ -55,7 +55,7 @@ can be viewed. `%s` will be replaced with the matched ID:
 ## Org Mode
 
 `issue-link` can add an Org mode link type of `issue:`. This allows you to insert
-issue links using `org-issue-link`. To use this add the following function call to your config:
+issue links using `org-insert-link`. To use this add the following function call to your config:
 
 ```el
 (issue-link-add-org-link-type)
