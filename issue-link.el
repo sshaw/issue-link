@@ -5,7 +5,7 @@
 ;; Version: 0.0.1
 ;; Keywords: git, vc, jira, github, bitbucket, gitlab, convenience
 ;; URL: http://github.com/sshaw/issue-link
-;; Package-Requires: ((cl-lib "0.6.1") (button-lock "1.0.2"))
+;; Package-Requires: ((emacs "24.3") (cl-lib "0.6.1") (button-lock "1.0.2"))
 
 ;; This file is NOT part of GNU Emacs.
 
@@ -37,6 +37,8 @@
 ;;
 ;; To add an Org mode link type of `issue:' call `issue-link-add-org-link-type'.
 ;;
+
+;;; Code:
 
 (require 'cl-lib)
 (require 'url-parse)
@@ -215,7 +217,7 @@ This allows one to insert and open issue IDs via `org-insert-link'."
 ;;;###autoload
 (defun issue-link-url (issue-id)
   "Return a URL for the issue given by ISSUE-ID.
-`nil' is returned if the URL cannot be constructed."
+nil is returned if the URL cannot be constructed."
   (when issue-id
     (or (issue-link--url-for-custom-regexp issue-id)
         (issue-link--url-for-repo issue-id))))
@@ -226,15 +228,15 @@ This allows one to insert and open issue IDs via `org-insert-link'."
 With a prefix argument prompt for ISSUE-ID.
 
 It will always prompt for `ISSUE-ID' if called interactively
-and `issue-link-issue-alist' is `nil' and no issue is associated
+and `issue-link-issue-alist' is nil and no issue is associated
 with the current branch.
 
 An attempt is made to build the link by first trying to match
-`ISSUE-ID' with a pattern in `issue-link-issue-alist'. If no match
+`ISSUE-ID' with a pattern in `issue-link-issue-alist'.  If no match
 is found, the link will be built from the branch's remote URL.
 
-If `issue-link-kill' is non-`nil' add the link to the kill ring.
-If `issue-link-open-in-browser' is non-`nil' open the link via
+If `issue-link-kill' is non-nil add the link to the kill ring.
+If `issue-link-open-in-browser' is non-nil open the link via
 `browse-url'.
 
 If the link cannot be build an error is signaled."
