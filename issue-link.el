@@ -44,7 +44,10 @@
 (require 'url-parse)
 (require 'button-lock)
 
+(declare-function 'org-link-set-parameters "org")
+
 ;; We don't want button-lock showing in the mode line
+;; TODO: make-local-variable first?
 (setq button-lock-mode-lighter nil)
 
 (defgroup issue-link nil
@@ -175,7 +178,7 @@ replaced with the issue ID matched by REGEXP."
          ((eq format 'html)  (format "<a href='%s'>%s</a>" url desc))
          ((eq format 'latex) (format "\\href{%s}{%s}" url desc))
          (t desc))
-      (issue-link--build-link-error issue-id))))
+      (issue-link--build-link-error path))))
 
 (defun issue-link--org-open (issue-id)
   (let ((url (issue-link-url issue-id)))
